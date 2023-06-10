@@ -3,29 +3,32 @@ import {
     SetUpFullPieceLineBlack,
     SetUpFullPieceLineWhite,
 } from "./setUpFullLine";
-import React, { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { pieceProps } from "../chess/chessUtils/BoxesJSX";
+import { convertBoardInJSX } from "./convertBoardInJSX";
+import { useState } from "react";
 
-function getGameBoardArray(arrayElement: { element: JSX.Element }[][]) {
-    let arrayGameBoard: JSX.Element[][] = [];
-    for (let index = 0; index < arrayElement.length; index++) {
-        arrayGameBoard[index] = arrayElement[index].map(({ element }) => (
-            <React.Fragment key={uuidv4()}>{element}</React.Fragment>
-        ));
-    }
-    return arrayGameBoard;
-}
-
-export function SetUpBoard(): JSX.Element {
-    let arrayElement: { element: JSX.Element }[][] = [];
+function setArrayElement(): (pieceProps | null)[][] {
+    let arrayElement: (pieceProps | null)[][] = [];
 
     arrayElement = arrayElement.concat(
         SetUpFullPieceLineWhite(),
         EmptyLine(),
         SetUpFullPieceLineBlack()
     );
+    return arrayElement;
+}
 
-    const [board, setBoard] = useState(getGameBoardArray(arrayElement));
+export function SetUpBoard(): JSX.Element {
+    let arrayElement = setArrayElement();
+    const [board, setBoard] = useState<(pieceProps | null)[][]>(arrayElement);
 
-    return <ul>{board}</ul>;
+    return (
+        <>
+            {board.map((element, index) => (
+                <ul key={index}>
+                    {convertBoardInJSX(element, index, [board, setBoard])}
+                </ul>
+            ))}
+        </>
+    );
 }

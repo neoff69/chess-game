@@ -1,36 +1,21 @@
-import { BoxWithPiece } from "../chess/chessUtils/BoxesUtils";
 import {
     whiteFullPieceData,
     whiteFullPawnData,
     blackFullPieceData,
     blackFullPawnData,
 } from "./setUpFullLineData";
+import { pieceProps } from "../chess/chessUtils/BoxesJSX";
 
-export function SetUpFullPieceLineWhite(): Array<
-    Array<{ element: JSX.Element }>
-> {
-    const pieceLine = whiteFullPieceData.map((piece) => ({
-        key: piece.key,
-        element: BoxWithPiece(piece),
-    }));
-    const pawnLine = whiteFullPawnData.map((piece) => ({
-        key: piece.key,
-        element: BoxWithPiece(piece),
-    }));
+export function SetUpFullPieceLineWhite(): pieceProps[][] {
+    let pieceLine = whiteFullPieceData;
+    let pawnLine = whiteFullPawnData;
 
     return [pieceLine, pawnLine];
 }
 
-export function SetUpFullPieceLineBlack(): Array<
-    Array<{ element: JSX.Element }>
-> {
-    const pieceLine = blackFullPieceData.map((piece) => ({
-        key: piece.key,
-        element: BoxWithPiece(piece),
-    }));
-    const pawnLine = blackFullPawnData.map((piece) => ({
-        key: piece.key,
-        element: BoxWithPiece(piece),
-    }));
-    return [pieceLine, pawnLine];
+export function SetUpFullPieceLineBlack(): pieceProps[][] {
+    let pieceLine = blackFullPieceData;
+    let pawnLine = blackFullPawnData;
+
+    return [pawnLine, pieceLine];
 }
