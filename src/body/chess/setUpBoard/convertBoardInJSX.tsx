@@ -1,5 +1,5 @@
-import { pieceProps, boxProps } from "../chess/setUpBoard/displayBoxes";
-import { BoxNoPiece } from "../chess/setUpBoard/displayBoxes";
+import { pieceProps, boxProps } from "./displayBoxes";
+import { BoxNoPiece } from "./displayBoxes";
 import React from "react";
 
 function getColorBox(line: number, column: number): string {

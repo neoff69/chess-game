@@ -4,16 +4,20 @@ import {
     blackFullPieceData,
     blackFullPawnData,
 } from "./setUpFullLineData";
-import { pieceProps } from "../chess/chessUtils/BoxesJSX";
+import { pieceProps } from "../setUpBoard/displayBoxes";
 
-export function SetUpFullPieceLineWhite(): pieceProps[][] {
+export function setUpEmptyLine(): null[][] {
+    return Array(4).fill(Array(8).fill(null));
+}
+
+export function setUpFullPieceLineWhite(): pieceProps[][] {
     let pieceLine = whiteFullPieceData;
     let pawnLine = whiteFullPawnData;
 
     return [pieceLine, pawnLine];
 }
 
-export function SetUpFullPieceLineBlack(): pieceProps[][] {
+export function setUpFullPieceLineBlack(): pieceProps[][] {
     let pieceLine = blackFullPieceData;
     let pawnLine = blackFullPawnData;
 
