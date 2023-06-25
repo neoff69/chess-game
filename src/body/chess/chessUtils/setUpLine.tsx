@@ -4,7 +4,7 @@ import {
     blackFullPieceData,
     blackFullPawnData,
 } from "./setUpFullLineData";
-import { pieceProps } from "../setUpBoard/displayBoxes";
+import { pieceProps } from "../setUpBoard/displayBoxes/displayBox";
 
 export function setUpEmptyLine(): null[][] {
     return Array(4).fill(Array(8).fill(null));

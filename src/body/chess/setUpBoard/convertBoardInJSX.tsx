@@ -1,6 +1,7 @@
-import { pieceProps, boxProps } from "./displayBoxes";
-import { BoxNoPiece } from "./displayBoxes";
+import { boxProps, pieceProps } from "../chessUtils/props";
+import { BoxNoPiece } from "./displayBoxes/displayBox";
 import React from "react";
+import { useStateProps } from "../chessUtils/props";
 
 function getColorBox(line: number, column: number): string {
     if (line % 2 == 1) {
@@ -25,8 +26,7 @@ function getBox(line: number, column: number): boxProps {
 export function convertBoardInJSX(
     element: (pieceProps | null)[],
     line: number,
-    setBoard: React.Dispatch<React.SetStateAction<(pieceProps | null)[][]>>,
-    [turn, setTurn]: any
+    stateProps: useStateProps
 ): JSX.Element {
     return (
         <>
@@ -38,8 +38,7 @@ export function convertBoardInJSX(
                             box,
                             piece,
                             { x: column, y: line },
-                            setBoard,
-                            [turn, setTurn]
+                            stateProps
                         )}
                     </React.Fragment>
                 );
