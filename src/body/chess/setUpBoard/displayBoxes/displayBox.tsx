@@ -2,6 +2,7 @@ import { useDrop } from "react-dnd";
 import { useStateProps } from "../../chessUtils/props";
 import { dragItem, pieceProps, boxProps } from "../../chessUtils/props";
 import { Picture } from "./displayPicture";
+import { enPassantManager } from "./enPassant";
 
 function setUpProps(
     pieceProps: pieceProps | null,
@@ -18,33 +19,21 @@ function setUpProps(
     return props;
 }
 
-function checkIfEnPassant(
-    origin: { x: number; y: number },
-    ending: { x: number; y: number },
-    element: any
-): boolean {
-    if (element.piece == "pawn" && ending.y % origin.y == 2) return true;
-    return false;
-}
-
 function updateBoard(
-    setBoard: any,
-    setTurn: any,
+    stateProps: useStateProps,
     origin: { x: number; y: number },
     ending: { x: number; y: number }
 ) {
-    setBoard((prevBoard: (pieceProps | null)[][]) => {
+    stateProps.setBoard((prevBoard: (pieceProps | null)[][]) => {
         let tempBoard = prevBoard.map((row: any) => [...row]);
-
         tempBoard[ending.y][ending.x] = {
             ...tempBoard[origin.y][origin.x],
         };
-        if (checkIfEnPassant(origin, ending, tempBoard[ending.y][ending.x]))
-            tempBoard[ending.y][ending.x].enPassant = true;
+        enPassantManager(origin, ending, tempBoard, stateProps);
         tempBoard[origin.y][origin.x] = null;
         return tempBoard;
     });
-    setTurn((prevTurn: number) => {
+    stateProps.setTurn((prevTurn: number) => {
         let nextTurn = prevTurn + 1;
         return nextTurn;
     });
@@ -57,12 +46,7 @@ function setUpDropEvent(
     const [, drop] = useDrop(() => ({
         accept: "image",
         drop: (item: dragItem) => {
-            updateBoard(
-                stateProps.setBoard,
-                stateProps.setTurn,
-                item.origin,
-                origin
-            );
+            updateBoard(stateProps, item.origin, origin);
         },
     }));
 

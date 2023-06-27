@@ -3,7 +3,7 @@ import {
     setUpFullPieceLineWhite,
     setUpEmptyLine,
 } from "../chessUtils/setUpLine";
-import { pieceProps, useStateProps } from "../chessUtils/props";
+import { enPassant, pieceProps, useStateProps } from "../chessUtils/props";
 import { useState } from "react";
 
 function setArrayElement(): (pieceProps | null)[][] {
@@ -29,6 +29,15 @@ export function setlegalMoveToZero(): number[][] {
     return legalMoveArray;
 }
 
+function setUpEnPassant(): enPassant {
+    let enPassant: enPassant = {
+        isEnPassant: false,
+        x: 0,
+        y: 0,
+    };
+    return enPassant;
+}
+
 export function setUpState(): useStateProps {
     const [board, setBoard] = useState<(pieceProps | null)[][]>(
         setArrayElement()
@@ -37,6 +46,7 @@ export function setUpState(): useStateProps {
         setlegalMoveToZero()
     );
     const [turn, setTurn] = useState<number>(0);
+    const [enPassant, setEnPassant] = useState<enPassant>(setUpEnPassant());
     let stateProps: useStateProps = {
         board: board,
         setBoard: setBoard,
@@ -44,6 +54,8 @@ export function setUpState(): useStateProps {
         setLegalMoveArray: setlegalMoveArray,
         turn: turn,
         setTurn: setTurn,
+        enPassant: enPassant,
+        setEnPassant: setEnPassant,
     };
     return stateProps;
 }

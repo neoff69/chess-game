@@ -1,25 +1,47 @@
 import { dragItem } from "../chessUtils/props";
 
+function pieceEatableEnPassant(
+    props: dragItem,
+    tempBoard: number[][],
+    direction: number
+) {
+    if (
+        props.stateProps.board[props.origin.y][props.origin.x + 1]?.enPassant ==
+        true
+    )
+        tempBoard[props.origin.y + direction][props.origin.x + 1] = 1;
+    else if (
+        props.stateProps.board[props.origin.y][props.origin.x - 1]?.enPassant ==
+        true
+    )
+        tempBoard[props.origin.y + direction][props.origin.x - 1] = 1;
+}
+
 function pieceEatable(
     props: dragItem,
     direction: number,
     tempBoard: number[][]
 ) {
-    let colorOponnent = "white";
-    if (direction == 1) colorOponnent = "black";
+    let colorOpponent = "white";
+    if (direction == 1) colorOpponent = "black";
     if (props.origin.y < 7 && props.origin.y > 0) {
         if (
             props.stateProps.board[props.origin.y + 1 * direction][
                 props.origin.x + 1
-            ]?.colorPiece == colorOponnent
+            ]?.colorPiece == colorOpponent
         )
             tempBoard[props.origin.y + 1 * direction][props.origin.x + 1] = 1;
         else if (
             props.stateProps.board[props.origin.y + 1 * direction][
                 props.origin.x - 1
-            ]?.colorPiece == colorOponnent
+            ]?.colorPiece == colorOpponent
         )
             tempBoard[props.origin.y + 1 * direction][props.origin.x - 1] = 1;
+    }
+    if (props.origin.y == 4 && direction == 1)
+        pieceEatableEnPassant(props, tempBoard, direction);
+    else if (props.origin.y == 3 && direction == -1) {
+        pieceEatableEnPassant(props, tempBoard, direction);
     }
 }
 
@@ -52,8 +74,9 @@ function secondDeplacement(
         props.stateProps.board[props.origin.y + 2 * direction][
             props.origin.x
         ] == null
-    )
-        tempBoard[props.origin.y + 2 * direction][props.origin.x] = 2;
+    ) {
+        tempBoard[props.origin.y + 2 * direction][props.origin.x] = 1;
+    }
 }
 
 function whitePawnMove(props: dragItem) {

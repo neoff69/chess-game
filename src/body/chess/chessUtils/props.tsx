@@ -5,6 +5,14 @@ export type useStateProps = {
     setLegalMoveArray: React.Dispatch<React.SetStateAction<number[][]>>;
     turn: number;
     setTurn: React.Dispatch<React.SetStateAction<number>>;
+    enPassant: enPassant;
+    setEnPassant: React.Dispatch<React.SetStateAction<enPassant>>;
+};
+
+export type enPassant = {
+    isEnPassant: boolean;
+    x: number;
+    y: number;
 };
 
 export type boxProps = {
