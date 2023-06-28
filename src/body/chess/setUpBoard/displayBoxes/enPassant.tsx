@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useStateProps } from "../../chessUtils/props";
 import { enPassant } from "../../chessUtils/props";
 
@@ -25,7 +26,6 @@ function checkIfEnPassant(
 }
 
 function deletePieceIfEnPassant(
-    prevState: enPassant,
     tempBoard: any[][],
     ending: { x: number; y: number },
     origin: { x: number; y: number }
@@ -33,16 +33,17 @@ function deletePieceIfEnPassant(
     if (
         tempBoard[ending.y][ending.x].piece == "pawn" &&
         origin.x != ending.x &&
-        Math.abs(prevState.y - ending.y) == 1 &&
-        ending.x == prevState.x
-    ) {
-        if (tempBoard[ending.y][ending.x].colorPiece == "white") {
-            console.log(ending.y - 1, ending.x);
-            tempBoard[ending.y - 1][ending.x] = null;
-        } else tempBoard[ending.y + 1][ending.x] = null;
-    } else {
-        tempBoard[prevState.y][prevState.x].enPassant = false;
-    }
+        tempBoard[ending.y - 1][ending.x].enPassant === true &&
+        tempBoard[ending.y][ending.x].colorPiece == "white"
+    )
+        tempBoard[ending.y - 1][ending.x] = null;
+    else if (
+        tempBoard[ending.y][ending.x].piece == "pawn" &&
+        origin.x != ending.x &&
+        tempBoard[ending.y + 1][ending.x].enPassant === true &&
+        tempBoard[ending.y][ending.x].colorPiece == "black"
+    )
+        tempBoard[ending.y + 1][ending.x] = null;
 }
 
 function removeEnPassant(
@@ -51,9 +52,11 @@ function removeEnPassant(
     ending: { x: number; y: number },
     origin: { x: number; y: number }
 ) {
+    deletePieceIfEnPassant(tempBoard, ending, origin);
     stateProps.setEnPassant((prevState: enPassant) => {
-        deletePieceIfEnPassant(prevState, tempBoard, ending, origin);
         if (prevState.isEnPassant == true) {
+            if (tempBoard[prevState.y][prevState.x])
+                tempBoard[prevState.y][prevState.x].enPassant = false;
             let temp: enPassant = {
                 isEnPassant: false,
                 y: 0,
