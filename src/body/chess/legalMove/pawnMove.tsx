@@ -79,28 +79,18 @@ function secondDeplacement(
     }
 }
 
-function whitePawnMove(props: dragItem) {
+function checkPawnMove(props: dragItem, direction: number) {
     props.stateProps.setLegalMoveArray((prevBoard: number[][]) => {
         let tempBoard = prevBoard.map((row: any) => [...row]);
-        firstDeplacement(props, 1, tempBoard);
-        secondDeplacement(props, 1, tempBoard);
-        pieceEatable(props, 1, tempBoard);
-        return tempBoard;
-    });
-}
-
-function blackPawnMove(props: dragItem) {
-    props.stateProps.setLegalMoveArray((prevBoard: number[][]) => {
-        let tempBoard = prevBoard.map((row: any) => [...row]);
-        firstDeplacement(props, -1, tempBoard);
-        secondDeplacement(props, -1, tempBoard);
-        pieceEatable(props, -1, tempBoard);
+        firstDeplacement(props, direction, tempBoard);
+        secondDeplacement(props, direction, tempBoard);
+        pieceEatable(props, direction, tempBoard);
         return tempBoard;
     });
 }
 
 export function pawnMove(props: dragItem): void {
     if (props.pieceProps == null) return;
-    if (props.pieceProps.colorPiece == "white") whitePawnMove(props);
-    else blackPawnMove(props);
+    if (props.pieceProps.colorPiece == "white") checkPawnMove(props, 1);
+    else checkPawnMove(props, -1);
 }

@@ -41,7 +41,7 @@ function isBorderNeeded(props: dragItem, isDragging: boolean): boolean {
 function displayPicture(
     props: dragItem,
     drag: any,
-    isDragging: any
+    isDragging: boolean | any
 ): JSX.Element {
     let isDraggable: boolean = checkIfDraggable(props);
     if (props.pieceProps == null) return <></>;
