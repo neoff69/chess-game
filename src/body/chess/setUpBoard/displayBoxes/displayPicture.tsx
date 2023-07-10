@@ -2,7 +2,7 @@ import { dragItem } from "../../chessUtils/props";
 import { useDrag } from "react-dnd";
 import { showLegalMove } from "../../legalMove/legalMove";
 import { useEffect } from "react";
-import { setlegalMoveToZero } from "../setUpUseState";
+import { setlegalMoveToZero } from "../../chessUtils/setUpUseState";
 
 function checkIfDraggable(props: dragItem): boolean {
     let isDraggable: boolean = false;
@@ -32,10 +32,25 @@ function displayNoPicture(props: dragItem): JSX.Element {
     );
 }
 
-function isBorderNeeded(props: dragItem, isDragging: boolean): boolean {
-    if (props.stateProps.legalMoveArray[props.origin.y][props.origin.x] == 1)
+function isBorderNeeded(
+    props: dragItem,
+    isDragging: boolean,
+    origin: { x: number; y: number }
+): boolean {
+    if (props.stateProps.legalMoveArray[props.origin.y][props.origin.x] === 1)
         return true;
+    if (origin.x === props.origin.x && origin.y === props.origin.y) return true;
     return isDragging;
+}
+
+function handleFirstClick(props: dragItem, isDraggable: boolean) {
+    if (isDraggable) {
+        showLegalMove(props);
+        props.stateProps.setOriginClick({
+            x: props.origin.x,
+            y: props.origin.y,
+        });
+    }
 }
 
 function displayPicture(
@@ -47,10 +62,10 @@ function displayPicture(
     if (props.pieceProps == null) return <></>;
     return (
         <img
-            //onClick={() => console.log("todo")}
+            onClick={() => handleFirstClick(props, isDraggable)}
             ref={isDraggable ? drag : null}
             className={`h-full ${
-                isBorderNeeded(props, isDragging)
+                isBorderNeeded(props, isDragging, props.stateProps.originClick)
                     ? " border-4 border-amber-400"
                     : ""
             }`}

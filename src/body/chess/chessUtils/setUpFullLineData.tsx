@@ -4,24 +4,28 @@ export const blackFullPieceData = [
         id: "blackRook1",
         piece: "rook",
         colorPiece: "black",
+        pin: false,
     },
     {
         key: 2,
         id: "blackKnight1",
         piece: "knight",
         colorPiece: "black",
+        pin: false,
     },
     {
         key: 3,
         id: "blackBishop1",
         piece: "bishop",
         colorPiece: "black",
+        pin: false,
     },
     {
         key: 4,
         id: "blackQueen",
         piece: "queen",
         colorPiece: "black",
+        pin: false,
     },
     {
         key: 5,
@@ -35,18 +39,21 @@ export const blackFullPieceData = [
         piece: "bishop",
         colorPiece: "black",
         enPassant: false,
+        pin: false,
     },
     {
         key: 7,
         id: "blackKnight2",
         piece: "knight",
         colorPiece: "black",
+        pin: false,
     },
     {
         key: 8,
         id: "blackRook2",
         piece: "rook",
         colorPiece: "black",
+        pin: false,
     },
 ];
 
@@ -57,6 +64,7 @@ export const blackFullPawnData = [
         piece: "pawn",
         colorPiece: "black",
         enPassant: false,
+        pin: false,
     },
     {
         key: 2,
@@ -64,6 +72,7 @@ export const blackFullPawnData = [
         piece: "pawn",
         colorPiece: "black",
         enPassant: false,
+        pin: false,
     },
     {
         key: 3,
@@ -71,6 +80,7 @@ export const blackFullPawnData = [
         piece: "pawn",
         colorPiece: "black",
         enPassant: false,
+        pin: false,
     },
     {
         key: 4,
@@ -78,6 +88,7 @@ export const blackFullPawnData = [
         piece: "pawn",
         colorPiece: "black",
         enPassant: false,
+        pin: false,
     },
     {
         key: 5,
@@ -85,6 +96,7 @@ export const blackFullPawnData = [
         piece: "pawn",
         colorPiece: "black",
         enPassant: false,
+        pin: false,
     },
     {
         key: 6,
@@ -92,6 +104,7 @@ export const blackFullPawnData = [
         piece: "pawn",
         colorPiece: "black",
         enPassant: false,
+        pin: false,
     },
     {
         key: 7,
@@ -99,6 +112,7 @@ export const blackFullPawnData = [
         piece: "pawn",
         colorPiece: "black",
         enPassant: false,
+        pin: false,
     },
     {
         key: 8,
@@ -106,6 +120,7 @@ export const blackFullPawnData = [
         piece: "pawn",
         colorPiece: "black",
         enPassant: false,
+        pin: false,
     },
 ];
 
@@ -115,24 +130,28 @@ export const whiteFullPieceData = [
         id: "whiteRook1",
         piece: "rook",
         colorPiece: "white",
+        pin: false,
     },
     {
         key: 2,
         id: "whiteKnight1",
         piece: "knight",
         colorPiece: "white",
+        pin: false,
     },
     {
         key: 3,
         id: "whiteBishop1",
         piece: "bishop",
         colorPiece: "white",
+        pin: false,
     },
     {
         key: 4,
         id: "whiteQueen",
         piece: "queen",
         colorPiece: "white",
+        pin: false,
     },
     {
         key: 5,
@@ -145,18 +164,21 @@ export const whiteFullPieceData = [
         id: "whiteBishop2",
         piece: "bishop",
         colorPiece: "white",
+        pin: false,
     },
     {
         key: 7,
         id: "whiteKnight2",
         piece: "knight",
         colorPiece: "white",
+        pin: false,
     },
     {
         key: 8,
         id: "whiteRook2",
         piece: "rook",
         colorPiece: "white",
+        pin: false,
     },
 ];
 
@@ -167,6 +189,7 @@ export const whiteFullPawnData = [
         piece: "pawn",
         colorPiece: "white",
         enPassant: false,
+        pin: false,
     },
     {
         key: 2,
@@ -174,6 +197,7 @@ export const whiteFullPawnData = [
         piece: "pawn",
         colorPiece: "white",
         enPassant: false,
+        pin: false,
     },
     {
         key: 3,
@@ -181,6 +205,7 @@ export const whiteFullPawnData = [
         piece: "pawn",
         colorPiece: "white",
         enPassant: false,
+        pin: false,
     },
     {
         key: 4,
@@ -188,6 +213,7 @@ export const whiteFullPawnData = [
         piece: "pawn",
         colorPiece: "white",
         enPassant: false,
+        pin: false,
     },
     {
         key: 5,
@@ -195,6 +221,7 @@ export const whiteFullPawnData = [
         piece: "pawn",
         colorPiece: "white",
         enPassant: false,
+        pin: false,
     },
     {
         key: 6,
@@ -202,6 +229,7 @@ export const whiteFullPawnData = [
         piece: "pawn",
         colorPiece: "white",
         enPassant: false,
+        pin: false,
     },
     {
         key: 7,
@@ -209,6 +237,7 @@ export const whiteFullPawnData = [
         piece: "pawn",
         colorPiece: "white",
         enPassant: false,
+        pin: false,
     },
     {
         key: 8,
@@ -216,5 +245,6 @@ export const whiteFullPawnData = [
         piece: "pawn",
         colorPiece: "white",
         enPassant: false,
+        pin: false,
     },
 ];

@@ -1,5 +1,5 @@
-import { convertBoardInJSX } from "./convertBoardInJSX";
-import { setUpState } from "./setUpUseState";
+import { convertBoardInJSX } from "./displayBoxes/convertBoardInJSX";
+import { setUpState } from "../chessUtils/setUpUseState";
 
 export function SetUpBoard(): JSX.Element {
     let stateProps = setUpState();

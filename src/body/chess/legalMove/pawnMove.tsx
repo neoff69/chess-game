@@ -2,25 +2,25 @@ import { dragItem } from "../chessUtils/props";
 
 function pieceEatableEnPassant(
     props: dragItem,
-    tempBoard: number[][],
+    copyLegalMoveArray: number[][],
     direction: number
 ) {
     if (
         props.stateProps.board[props.origin.y][props.origin.x + 1]?.enPassant ==
         true
     )
-        tempBoard[props.origin.y + direction][props.origin.x + 1] = 1;
+        copyLegalMoveArray[props.origin.y + direction][props.origin.x + 1] = 1;
     else if (
         props.stateProps.board[props.origin.y][props.origin.x - 1]?.enPassant ==
         true
     )
-        tempBoard[props.origin.y + direction][props.origin.x - 1] = 1;
+        copyLegalMoveArray[props.origin.y + direction][props.origin.x - 1] = 1;
 }
 
 function pieceEatable(
     props: dragItem,
     direction: number,
-    tempBoard: number[][]
+    copyLegalMoveArray: number[][]
 ) {
     let colorOpponent = "white";
     if (direction == 1) colorOpponent = "black";
@@ -30,25 +30,29 @@ function pieceEatable(
                 props.origin.x + 1
             ]?.colorPiece == colorOpponent
         )
-            tempBoard[props.origin.y + 1 * direction][props.origin.x + 1] = 1;
+            copyLegalMoveArray[props.origin.y + 1 * direction][
+                props.origin.x + 1
+            ] = 1;
         else if (
             props.stateProps.board[props.origin.y + 1 * direction][
                 props.origin.x - 1
             ]?.colorPiece == colorOpponent
         )
-            tempBoard[props.origin.y + 1 * direction][props.origin.x - 1] = 1;
+            copyLegalMoveArray[props.origin.y + 1 * direction][
+                props.origin.x - 1
+            ] = 1;
     }
     if (props.origin.y == 4 && direction == 1)
-        pieceEatableEnPassant(props, tempBoard, direction);
+        pieceEatableEnPassant(props, copyLegalMoveArray, direction);
     else if (props.origin.y == 3 && direction == -1) {
-        pieceEatableEnPassant(props, tempBoard, direction);
+        pieceEatableEnPassant(props, copyLegalMoveArray, direction);
     }
 }
 
 function firstDeplacement(
     props: dragItem,
     direction: number,
-    tempBoard: number[][]
+    copyLegalMoveArray: number[][]
 ) {
     if (
         props.origin.y < 7 &&
@@ -57,13 +61,13 @@ function firstDeplacement(
             props.origin.x
         ] == null
     )
-        tempBoard[props.origin.y + 1 * direction][props.origin.x] = 1;
+        copyLegalMoveArray[props.origin.y + 1 * direction][props.origin.x] = 1;
 }
 
 function secondDeplacement(
     props: dragItem,
     direction: number,
-    tempBoard: number[][]
+    copyLegalMoveArray: number[][]
 ) {
     if (
         ((props.origin.y == 1 && direction == 1) ||
@@ -75,17 +79,17 @@ function secondDeplacement(
             props.origin.x
         ] == null
     ) {
-        tempBoard[props.origin.y + 2 * direction][props.origin.x] = 1;
+        copyLegalMoveArray[props.origin.y + 2 * direction][props.origin.x] = 1;
     }
 }
 
 function checkPawnMove(props: dragItem, direction: number) {
     props.stateProps.setLegalMoveArray((prevBoard: number[][]) => {
-        let tempBoard = prevBoard.map((row: any) => [...row]);
-        firstDeplacement(props, direction, tempBoard);
-        secondDeplacement(props, direction, tempBoard);
-        pieceEatable(props, direction, tempBoard);
-        return tempBoard;
+        let copyLegalMoveArray = prevBoard.map((row: any) => [...row]);
+        firstDeplacement(props, direction, copyLegalMoveArray);
+        secondDeplacement(props, direction, copyLegalMoveArray);
+        pieceEatable(props, direction, copyLegalMoveArray);
+        return copyLegalMoveArray;
     });
 }
 

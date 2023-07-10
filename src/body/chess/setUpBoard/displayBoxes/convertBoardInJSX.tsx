@@ -1,7 +1,7 @@
-import { pieceProps, boxProps } from "../chess/chessUtils/props";
-import { BoxNoPiece } from "../chess/setUpBoard/displayBoxes/displayBox";
+import { boxProps, pieceProps } from "../../chessUtils/props";
+import { BoxNoPiece } from "./displayBox";
 import React from "react";
-import { useStateProps } from "../chess/chessUtils/props";
+import { useStateProps } from "../../chessUtils/props";
 
 function getColorBox(line: number, column: number): string {
     if (line % 2 == 1) {
