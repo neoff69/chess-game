@@ -1,6 +1,6 @@
-export type useStateProps = {
-    board: (pieceProps | null)[][];
-    setBoard: React.Dispatch<React.SetStateAction<(pieceProps | null)[][]>>;
+export type useStateObject = {
+    board: (pieceObject | null)[][];
+    setBoard: React.Dispatch<React.SetStateAction<(pieceObject | null)[][]>>;
     legalMoveArray: number[][];
     setLegalMoveArray: React.Dispatch<React.SetStateAction<number[][]>>;
     turn: number;
@@ -37,8 +37,8 @@ export type useStateProps = {
             y: number;
         }>
     >;
-    check: boolean;
-    setCheck: React.Dispatch<React.SetStateAction<boolean>>;
+    check: string;
+    setCheck: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export type enPassant = {
@@ -47,13 +47,13 @@ export type enPassant = {
     y: number;
 };
 
-export type boxProps = {
+export type boxObject = {
     bottom: string;
     left: string;
     colorBox: string;
 };
 
-export type pieceProps = {
+export type pieceObject = {
     colorPiece: string;
     piece: string;
     key: number;
@@ -63,8 +63,8 @@ export type pieceProps = {
 };
 
 export interface dragItem {
-    pieceProps: pieceProps | null;
-    boxProps: boxProps;
+    pieceObject: pieceObject | null;
+    boxObject: boxObject;
     origin: { x: number; y: number };
-    stateProps: useStateProps;
+    stateObject: useStateObject;
 }

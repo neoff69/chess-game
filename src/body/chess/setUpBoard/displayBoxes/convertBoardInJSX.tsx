@@ -1,7 +1,7 @@
-import { boxProps, pieceProps } from "../../chessUtils/props";
+import { boxObject, pieceObject } from "../../chessUtils/object";
 import { BoxNoPiece } from "./displayBox";
 import React from "react";
-import { useStateProps } from "../../chessUtils/props";
+import { useStateObject } from "../../chessUtils/object";
 
 function getColorBox(line: number, column: number): string {
     if (line % 2 == 1) {
@@ -13,8 +13,8 @@ function getColorBox(line: number, column: number): string {
     }
 }
 
-function getBox(line: number, column: number): boxProps {
-    let box: boxProps = {
+function getBox(line: number, column: number): boxObject {
+    let box: boxObject = {
         bottom: `bottom-${line.toString()}/8`,
         left: `left-${column.toString()}/8`,
         colorBox: getColorBox(line, column),
@@ -24,21 +24,21 @@ function getBox(line: number, column: number): boxProps {
 }
 
 export function convertBoardInJSX(
-    element: (pieceProps | null)[],
+    element: (pieceObject | null)[],
     line: number,
-    stateProps: useStateProps
+    stateObject: useStateObject
 ): JSX.Element {
     return (
         <>
             {element.map((piece, column) => {
-                let box: boxProps = getBox(line + 1, column + 1);
+                let box: boxObject = getBox(line + 1, column + 1);
                 return (
                     <React.Fragment key={`${line}-${column}`}>
                         {BoxNoPiece(
                             box,
                             piece,
                             { x: column, y: line },
-                            stateProps
+                            stateObject
                         )}
                     </React.Fragment>
                 );

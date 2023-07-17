@@ -3,11 +3,11 @@ import {
     setUpFullPieceLineWhite,
     setUpEmptyLine,
 } from "./setUpLine";
-import { enPassant, pieceProps, useStateProps } from "./props";
+import { enPassant, pieceObject, useStateObject } from "./Object";
 import { useState } from "react";
 
-function setArrayElement(): (pieceProps | null)[][] {
-    let arrayElement: (pieceProps | null)[][] = [];
+function setArrayElement(): (pieceObject | null)[][] {
+    let arrayElement: (pieceObject | null)[][] = [];
 
     arrayElement = arrayElement.concat(
         setUpFullPieceLineWhite(),
@@ -38,8 +38,8 @@ function setUpEnPassant(): enPassant {
     return enPassant;
 }
 
-export function setUpState(): useStateProps {
-    const [board, setBoard] = useState<(pieceProps | null)[][]>(
+export function setUpState(): useStateObject {
+    const [board, setBoard] = useState<(pieceObject | null)[][]>(
         setArrayElement()
     );
     const [legalMoveArray, setlegalMoveArray] = useState<number[][]>(
@@ -50,8 +50,8 @@ export function setUpState(): useStateProps {
     const [originClick, setOriginClick] = useState({ x: -1, y: -1 });
     const [PositionWhiteKing, setPositionWhiteKing] = useState({ x: 4, y: 0 });
     const [PositionBlackKing, setPositionBlackKing] = useState({ x: 4, y: 7 });
-    const [check, setCheck] = useState(false);
-    let stateProps: useStateProps = {
+    const [check, setCheck] = useState("");
+    let stateObject: useStateObject = {
         board: board,
         setBoard: setBoard,
         legalMoveArray: legalMoveArray,
@@ -69,5 +69,5 @@ export function setUpState(): useStateProps {
         check,
         setCheck,
     };
-    return stateProps;
+    return stateObject;
 }

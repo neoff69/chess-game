@@ -1,17 +1,17 @@
-import { dragItem } from "../../chessUtils/props";
+import { dragItem } from "../../chessUtils/object";
 import { checkIfEmptyOrEatable } from "./moveUtils";
 
 function bottomLeftMove(
-    props: dragItem,
+    objectDragItem: dragItem,
     canEat: string,
     copyLegalMoveArray: any[][]
 ) {
-    let copyX = props.origin.x - 1;
-    let copyY = props.origin.y - 1;
+    let copyX = objectDragItem.origin.x - 1;
+    let copyY = objectDragItem.origin.y - 1;
 
     while (copyX >= 0 && copyY >= 0) {
         if (
-            checkIfEmptyOrEatable(props, canEat, copyLegalMoveArray, {
+            checkIfEmptyOrEatable(objectDragItem, canEat, copyLegalMoveArray, {
                 x: copyX,
                 y: copyY,
             }) == false
@@ -23,16 +23,16 @@ function bottomLeftMove(
 }
 
 function bottomRightMove(
-    props: dragItem,
+    objectDragItem: dragItem,
     canEat: string,
     copyLegalMoveArray: any[][]
 ) {
-    let copyX = props.origin.x + 1;
-    let copyY = props.origin.y - 1;
+    let copyX = objectDragItem.origin.x + 1;
+    let copyY = objectDragItem.origin.y - 1;
 
     while (copyX <= 7 && copyY >= 0) {
         if (
-            checkIfEmptyOrEatable(props, canEat, copyLegalMoveArray, {
+            checkIfEmptyOrEatable(objectDragItem, canEat, copyLegalMoveArray, {
                 x: copyX,
                 y: copyY,
             }) == false
@@ -44,16 +44,16 @@ function bottomRightMove(
 }
 
 function topLeftMove(
-    props: dragItem,
+    objectDragItem: dragItem,
     canEat: string,
     copyLegalMoveArray: any[][]
 ) {
-    let copyX = props.origin.x - 1;
-    let copyY = props.origin.y + 1;
+    let copyX = objectDragItem.origin.x - 1;
+    let copyY = objectDragItem.origin.y + 1;
 
     while (copyX >= 0 && copyY <= 7) {
         if (
-            checkIfEmptyOrEatable(props, canEat, copyLegalMoveArray, {
+            checkIfEmptyOrEatable(objectDragItem, canEat, copyLegalMoveArray, {
                 x: copyX,
                 y: copyY,
             }) == false
@@ -65,16 +65,16 @@ function topLeftMove(
 }
 
 function topRightMove(
-    props: dragItem,
+    objectDragItem: dragItem,
     canEat: string,
     copyLegalMoveArray: any[][]
 ) {
-    let copyX = props.origin.x + 1;
-    let copyY = props.origin.y + 1;
+    let copyX = objectDragItem.origin.x + 1;
+    let copyY = objectDragItem.origin.y + 1;
 
     while (copyX <= 7 && copyY <= 7) {
         if (
-            checkIfEmptyOrEatable(props, canEat, copyLegalMoveArray, {
+            checkIfEmptyOrEatable(objectDragItem, canEat, copyLegalMoveArray, {
                 x: copyX,
                 y: copyY,
             }) == false
@@ -86,12 +86,12 @@ function topRightMove(
 }
 
 export function diagonalMove(
-    props: dragItem,
+    objectDragItem: dragItem,
     canEat: string,
     copyLegalMoveArray: any[][]
 ) {
-    bottomLeftMove(props, canEat, copyLegalMoveArray);
-    bottomRightMove(props, canEat, copyLegalMoveArray);
-    topLeftMove(props, canEat, copyLegalMoveArray);
-    topRightMove(props, canEat, copyLegalMoveArray);
+    bottomLeftMove(objectDragItem, canEat, copyLegalMoveArray);
+    bottomRightMove(objectDragItem, canEat, copyLegalMoveArray);
+    topLeftMove(objectDragItem, canEat, copyLegalMoveArray);
+    topRightMove(objectDragItem, canEat, copyLegalMoveArray);
 }

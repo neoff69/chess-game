@@ -1,13 +1,15 @@
-import { pieceProps, useStateProps } from "../chessUtils/props";
+import { pieceObject, useStateObject } from "../chessUtils/object";
+import { setCheckState } from "./checkDiagonal";
 
 function checkPiece(
-    pieceToCheck: pieceProps,
+    pieceToCheck: pieceObject,
     color: string,
     numberSameColor: number,
-    stateProps: useStateProps,
+    stateObject: useStateObject,
     pinnedPosition: { x: number; y: number },
     currentPosition: { x: number; y: number },
-    legalMoveArray: any[][]
+    kingPosition: { x: number; y: number },
+    board: any[][]
 ) {
     if (color == pieceToCheck.colorPiece) {
         pinnedPosition.x = currentPosition.x;
@@ -16,9 +18,9 @@ function checkPiece(
     } else {
         if (pieceToCheck.piece == "queen" || pieceToCheck.piece == "rook") {
             if (numberSameColor === 0) {
-                stateProps.setCheck(true);
+                setCheckState(board, kingPosition, stateObject);
             } else if (numberSameColor === 1) {
-                legalMoveArray[pinnedPosition.y][pinnedPosition.x].pin = true;
+                board[pinnedPosition.y][pinnedPosition.x].pin = true;
             }
         }
     }
@@ -26,9 +28,9 @@ function checkPiece(
 }
 
 function checkLineBot(
-    legalMoveArray: any[][],
+    board: any[][],
     kingPosition: { x: number; y: number },
-    stateProps: useStateProps,
+    stateObject: useStateObject,
     color: string
 ) {
     let tempX = kingPosition.x;
@@ -37,29 +39,30 @@ function checkLineBot(
     let numberSameColor: number = 0;
     while (tempY > 0) {
         tempY -= 1;
-        if (legalMoveArray[tempY][tempX] != null) {
+        if (board[tempY][tempX] != null) {
             numberSameColor = checkPiece(
-                legalMoveArray[tempY][tempX],
+                board[tempY][tempX],
                 color,
                 numberSameColor,
-                stateProps,
+                stateObject,
                 pinnedPosition,
                 { x: tempX, y: tempY },
-                legalMoveArray
+                kingPosition,
+                board
             );
         }
         if (
-            legalMoveArray[tempY][tempX] != null &&
-            legalMoveArray[tempY][tempX]?.colorPiece != color
+            board[tempY][tempX] != null &&
+            board[tempY][tempX]?.colorPiece != color
         )
             break;
     }
 }
 
 function checkLineTop(
-    legalMoveArray: any[][],
+    board: any[][],
     kingPosition: { x: number; y: number },
-    stateProps: useStateProps,
+    stateObject: useStateObject,
     color: string
 ) {
     let tempX = kingPosition.x;
@@ -68,29 +71,30 @@ function checkLineTop(
     let numberSameColor: number = 0;
     while (tempY < 7) {
         tempY += 1;
-        if (legalMoveArray[tempY][tempX] != null) {
+        if (board[tempY][tempX] != null) {
             numberSameColor = checkPiece(
-                legalMoveArray[tempY][tempX],
+                board[tempY][tempX],
                 color,
                 numberSameColor,
-                stateProps,
+                stateObject,
                 pinnedPosition,
                 { x: tempX, y: tempY },
-                legalMoveArray
+                kingPosition,
+                board
             );
         }
         if (
-            legalMoveArray[tempY][tempX] != null &&
-            legalMoveArray[tempY][tempX]?.colorPiece != color
+            board[tempY][tempX] != null &&
+            board[tempY][tempX]?.colorPiece != color
         )
             break;
     }
 }
 
 function checkLineLeft(
-    legalMoveArray: any[][],
+    board: any[][],
     kingPosition: { x: number; y: number },
-    stateProps: useStateProps,
+    stateObject: useStateObject,
     color: string
 ) {
     let tempX = kingPosition.x;
@@ -99,29 +103,30 @@ function checkLineLeft(
     let numberSameColor: number = 0;
     while (tempX > 0) {
         tempX -= 1;
-        if (legalMoveArray[tempY][tempX] != null) {
+        if (board[tempY][tempX] != null) {
             numberSameColor = checkPiece(
-                legalMoveArray[tempY][tempX],
+                board[tempY][tempX],
                 color,
                 numberSameColor,
-                stateProps,
+                stateObject,
                 pinnedPosition,
                 { x: tempX, y: tempY },
-                legalMoveArray
+                kingPosition,
+                board
             );
         }
         if (
-            legalMoveArray[tempY][tempX] != null &&
-            legalMoveArray[tempY][tempX]?.colorPiece != color
+            board[tempY][tempX] != null &&
+            board[tempY][tempX]?.colorPiece != color
         )
             break;
     }
 }
 
 function checkLineRight(
-    legalMoveArray: any[][],
+    board: any[][],
     kingPosition: { x: number; y: number },
-    stateProps: useStateProps,
+    stateObject: useStateObject,
     color: string
 ) {
     let tempX = kingPosition.x;
@@ -130,33 +135,34 @@ function checkLineRight(
     let numberSameColor: number = 0;
     while (tempX > 0) {
         tempX -= 1;
-        if (legalMoveArray[tempY][tempX] != null) {
+        if (board[tempY][tempX] != null) {
             numberSameColor = checkPiece(
-                legalMoveArray[tempY][tempX],
+                board[tempY][tempX],
                 color,
                 numberSameColor,
-                stateProps,
+                stateObject,
                 pinnedPosition,
                 { x: tempX, y: tempY },
-                legalMoveArray
+                kingPosition,
+                board
             );
         }
         if (
-            legalMoveArray[tempY][tempX] != null &&
-            legalMoveArray[tempY][tempX]?.colorPiece != color
+            board[tempY][tempX] != null &&
+            board[tempY][tempX]?.colorPiece != color
         )
             break;
     }
 }
 
 export function checkLine(
-    legalMoveArray: any[][],
+    board: any[][],
     kingPosition: { x: number; y: number },
-    stateProps: useStateProps,
+    stateObject: useStateObject,
     color: string
 ) {
-    checkLineBot(legalMoveArray, kingPosition, stateProps, color);
-    checkLineTop(legalMoveArray, kingPosition, stateProps, color);
-    checkLineLeft(legalMoveArray, kingPosition, stateProps, color);
-    checkLineRight(legalMoveArray, kingPosition, stateProps, color);
+    checkLineBot(board, kingPosition, stateObject, color);
+    checkLineTop(board, kingPosition, stateObject, color);
+    checkLineLeft(board, kingPosition, stateObject, color);
+    checkLineRight(board, kingPosition, stateObject, color);
 }

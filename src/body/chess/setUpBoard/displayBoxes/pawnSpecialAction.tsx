@@ -1,17 +1,17 @@
-import { useStateProps } from "../../chessUtils/props";
-import { enPassant } from "../../chessUtils/props";
+import { useStateObject } from "../../chessUtils/object";
+import { enPassant } from "../../chessUtils/object";
 
 function checkIfEnPassant(
     origin: { x: number; y: number },
     ending: { x: number; y: number },
     element: any,
-    stateProps: useStateProps
+    stateObject: useStateObject
 ) {
     if (
         (element.piece == "pawn" && origin.y - ending.y == 2) ||
         (element.piece == "pawn" && origin.y - ending.y == -2)
     ) {
-        stateProps.setEnPassant(() => {
+        stateObject.setEnPassant(() => {
             element.enPassant = true;
             let temp: enPassant = {
                 isEnPassant: true,
@@ -25,39 +25,39 @@ function checkIfEnPassant(
 }
 
 function deletePieceIfEnPassant(
-    copyLegalMoveArray: any[][],
+    board: any[][],
     ending: { x: number; y: number },
     origin: { x: number; y: number }
 ) {
     if (
-        copyLegalMoveArray[ending.y][ending.x].piece == "pawn" &&
+        board[ending.y][ending.x].piece == "pawn" &&
         origin.x != ending.x &&
         ending.y > 0 &&
-        copyLegalMoveArray[ending.y - 1][ending.x]?.enPassant === true &&
-        copyLegalMoveArray[ending.y][ending.x].colorPiece == "white"
+        board[ending.y - 1][ending.x]?.enPassant === true &&
+        board[ending.y][ending.x].colorPiece == "white"
     )
-        copyLegalMoveArray[ending.y - 1][ending.x] = null;
+        board[ending.y - 1][ending.x] = null;
     else if (
-        copyLegalMoveArray[ending.y][ending.x].piece == "pawn" &&
+        board[ending.y][ending.x].piece == "pawn" &&
         origin.x != ending.x &&
         ending.y < 7 &&
-        copyLegalMoveArray[ending.y + 1][ending.x]?.enPassant === true &&
-        copyLegalMoveArray[ending.y][ending.x].colorPiece == "black"
+        board[ending.y + 1][ending.x]?.enPassant === true &&
+        board[ending.y][ending.x].colorPiece == "black"
     )
-        copyLegalMoveArray[ending.y + 1][ending.x] = null;
+        board[ending.y + 1][ending.x] = null;
 }
 
 function removeEnPassant(
-    stateProps: useStateProps,
-    copyLegalMoveArray: any[][],
+    stateObject: useStateObject,
+    board: any[][],
     ending: { x: number; y: number },
     origin: { x: number; y: number }
 ) {
-    deletePieceIfEnPassant(copyLegalMoveArray, ending, origin);
-    stateProps.setEnPassant((prevState: enPassant) => {
+    deletePieceIfEnPassant(board, ending, origin);
+    stateObject.setEnPassant((prevState: enPassant) => {
         if (prevState.isEnPassant == true) {
-            if (copyLegalMoveArray[prevState.y][prevState.x])
-                copyLegalMoveArray[prevState.y][prevState.x].enPassant = false;
+            if (board[prevState.y][prevState.x])
+                board[prevState.y][prevState.x].enPassant = false;
             let temp: enPassant = {
                 isEnPassant: false,
                 y: 0,
@@ -79,20 +79,20 @@ function changePiece(
 export function pawnSpecialAction(
     origin: { x: number; y: number },
     ending: { x: number; y: number },
-    copyLegalMoveArray: any[][],
-    stateProps: useStateProps
+    board: any[][],
+    stateObject: useStateObject
 ) {
-    removeEnPassant(stateProps, copyLegalMoveArray, ending, origin);
-    if (copyLegalMoveArray[ending.y][ending.x].piece == "pawn") {
+    removeEnPassant(stateObject, board, ending, origin);
+    if (board[ending.y][ending.x].piece == "pawn") {
         if (ending.y == 3 || ending.y == 4) {
             checkIfEnPassant(
                 origin,
                 ending,
-                copyLegalMoveArray[ending.y][ending.x],
-                stateProps
+                board[ending.y][ending.x],
+                stateObject
             );
         } else if (ending.y == 0 || ending.y == 7) {
-            changePiece(copyLegalMoveArray, ending);
+            changePiece(board, ending);
         }
     }
 }

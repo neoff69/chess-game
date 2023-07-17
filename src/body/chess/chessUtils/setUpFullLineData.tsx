@@ -32,6 +32,7 @@ export const blackFullPieceData = [
         id: "blackKing",
         piece: "king",
         colorPiece: "black",
+        pin: false,
     },
     {
         key: 6,
@@ -158,6 +159,7 @@ export const whiteFullPieceData = [
         id: "whiteKing",
         piece: "king",
         colorPiece: "white",
+        pin: false,
     },
     {
         key: 6,

@@ -1,53 +1,55 @@
-import { dragItem } from "../chessUtils/props";
+import { dragItem } from "../chessUtils/object";
 import { squareMove } from "./moveUtils/squareMove";
 import { diagonalMove } from "./moveUtils/diagonalMove";
+//import { kingDeplacement } from "./moveUtils/kingDeplacement";
 import { lineMove } from "./moveUtils/lineMove";
 import { knightLegalMove } from "./moveUtils/knightMove";
 import { setCanEatColor } from "./moveUtils/moveUtils";
 
-export function queenMove(props: dragItem) {
-    let canEat = setCanEatColor(props.pieceProps?.colorPiece);
-    props.stateProps.setLegalMoveArray((prevBoard: number[][]) => {
+export function queenMove(objectDragItem: dragItem) {
+    let canEat = setCanEatColor(objectDragItem.pieceObject?.colorPiece);
+    objectDragItem.stateObject.setLegalMoveArray((prevBoard: number[][]) => {
         let copyLegalMoveArray = prevBoard.map((row: any) => [...row]);
-        squareMove(props, canEat, copyLegalMoveArray);
-        diagonalMove(props, canEat, copyLegalMoveArray);
-        lineMove(props, canEat, copyLegalMoveArray);
+        squareMove(objectDragItem, canEat, copyLegalMoveArray);
+        diagonalMove(objectDragItem, canEat, copyLegalMoveArray);
+        lineMove(objectDragItem, canEat, copyLegalMoveArray);
         return copyLegalMoveArray;
     });
 }
 
-export function kingMove(props: dragItem) {
-    let canEat = setCanEatColor(props.pieceProps?.colorPiece);
-    props.stateProps.setLegalMoveArray((prevBoard: number[][]) => {
+export function kingMove(objectDragItem: dragItem) {
+    let canEat = setCanEatColor(objectDragItem.pieceObject?.colorPiece);
+    objectDragItem.stateObject.setLegalMoveArray((prevBoard: number[][]) => {
         let copyLegalMoveArray = prevBoard.map((row: any) => [...row]);
-        squareMove(props, canEat, copyLegalMoveArray);
+        //kingDeplacement(objectDragItem, canEat, copyLegalMoveArray);
+        squareMove(objectDragItem, canEat, copyLegalMoveArray);
         return copyLegalMoveArray;
     });
 }
 
-export function rookMove(props: dragItem) {
-    let canEat = setCanEatColor(props.pieceProps?.colorPiece);
-    props.stateProps.setLegalMoveArray((prevBoard: number[][]) => {
+export function rookMove(objectDragItem: dragItem) {
+    let canEat = setCanEatColor(objectDragItem.pieceObject?.colorPiece);
+    objectDragItem.stateObject.setLegalMoveArray((prevBoard: number[][]) => {
         let copyLegalMoveArray = prevBoard.map((row: any) => [...row]);
-        lineMove(props, canEat, copyLegalMoveArray);
+        lineMove(objectDragItem, canEat, copyLegalMoveArray);
         return copyLegalMoveArray;
     });
 }
 
-export function bishopMove(props: dragItem) {
-    let canEat = setCanEatColor(props.pieceProps?.colorPiece);
-    props.stateProps.setLegalMoveArray((prevBoard: number[][]) => {
+export function bishopMove(objectDragItem: dragItem) {
+    let canEat = setCanEatColor(objectDragItem.pieceObject?.colorPiece);
+    objectDragItem.stateObject.setLegalMoveArray((prevBoard: number[][]) => {
         let copyLegalMoveArray = prevBoard.map((row: any) => [...row]);
-        diagonalMove(props, canEat, copyLegalMoveArray);
+        diagonalMove(objectDragItem, canEat, copyLegalMoveArray);
         return copyLegalMoveArray;
     });
 }
 
-export function knightMove(props: dragItem) {
-    let canEat = setCanEatColor(props.pieceProps?.colorPiece);
-    props.stateProps.setLegalMoveArray((prevBoard: number[][]) => {
+export function knightMove(objectDragItem: dragItem) {
+    let canEat = setCanEatColor(objectDragItem.pieceObject?.colorPiece);
+    objectDragItem.stateObject.setLegalMoveArray((prevBoard: number[][]) => {
         let copyLegalMoveArray = prevBoard.map((row: any) => [...row]);
-        knightLegalMove(props, canEat, copyLegalMoveArray);
+        knightLegalMove(objectDragItem, canEat, copyLegalMoveArray);
         return copyLegalMoveArray;
     });
 }

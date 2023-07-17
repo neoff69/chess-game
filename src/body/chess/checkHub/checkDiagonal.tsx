@@ -1,13 +1,23 @@
-import { pieceProps, useStateProps } from "../chessUtils/props";
+import { pieceObject, useStateObject } from "../chessUtils/object";
+
+export function setCheckState(
+    board: any[][],
+    kingPosition: { x: number; y: number },
+    stateObject: useStateObject
+) {
+    console.log("cc");
+    stateObject.setCheck(board[kingPosition.y][kingPosition.x].colorPiece);
+}
 
 function checkPiece(
-    pieceToCheck: pieceProps,
+    pieceToCheck: pieceObject,
     color: string,
     numberSameColor: number,
-    stateProps: useStateProps,
+    stateObject: useStateObject,
     pinnedPosition: { x: number; y: number },
     currentPosition: { x: number; y: number },
-    legalMoveArray: any[][]
+    kingPosition: { x: number; y: number },
+    board: any[][]
 ) {
     if (color == pieceToCheck.colorPiece) {
         pinnedPosition.x = currentPosition.x;
@@ -16,10 +26,9 @@ function checkPiece(
     } else {
         if (pieceToCheck.piece == "bishop" || pieceToCheck.piece == "queen") {
             if (numberSameColor === 0) {
-                console.log("cc");
-                stateProps.setCheck(true);
+                setCheckState(board, kingPosition, stateObject);
             } else if (numberSameColor === 1) {
-                legalMoveArray[pinnedPosition.y][pinnedPosition.x].pin = true;
+                board[pinnedPosition.y][pinnedPosition.x].pin = true;
             }
         }
     }
@@ -27,9 +36,9 @@ function checkPiece(
 }
 
 function checkDiagonalTopLeft(
-    legalMoveArray: any[][],
+    board: any[][],
     kingPosition: { x: number; y: number },
-    stateProps: useStateProps,
+    stateObject: useStateObject,
     color: string
 ) {
     let tempX = kingPosition.x;
@@ -39,29 +48,30 @@ function checkDiagonalTopLeft(
     while (tempY > 0 && tempX > 0) {
         tempY -= 1;
         tempX -= 1;
-        if (legalMoveArray[tempY][tempX] != null) {
+        if (board[tempY][tempX] != null) {
             numberSameColor = checkPiece(
-                legalMoveArray[tempY][tempX],
+                board[tempY][tempX],
                 color,
                 numberSameColor,
-                stateProps,
+                stateObject,
                 pinnedPosition,
                 { x: tempX, y: tempY },
-                legalMoveArray
+                kingPosition,
+                board
             );
         }
         if (
-            legalMoveArray[tempY][tempX] != null &&
-            legalMoveArray[tempY][tempX]?.colorPiece != color
+            board[tempY][tempX] != null &&
+            board[tempY][tempX]?.colorPiece != color
         )
             break;
     }
 }
 
 function checkDiagonalTopRight(
-    legalMoveArray: any[][],
+    board: any[][],
     kingPosition: { x: number; y: number },
-    stateProps: useStateProps,
+    stateObject: useStateObject,
     color: string
 ) {
     let tempX = kingPosition.x;
@@ -71,29 +81,30 @@ function checkDiagonalTopRight(
     while (tempY > 0 && tempX < 7) {
         tempY -= 1;
         tempX += 1;
-        if (legalMoveArray[tempY][tempX] != null) {
+        if (board[tempY][tempX] != null) {
             numberSameColor = checkPiece(
-                legalMoveArray[tempY][tempX],
+                board[tempY][tempX],
                 color,
                 numberSameColor,
-                stateProps,
+                stateObject,
                 pinnedPosition,
                 { x: tempX, y: tempY },
-                legalMoveArray
+                kingPosition,
+                board
             );
         }
         if (
-            legalMoveArray[tempY][tempX] != null &&
-            legalMoveArray[tempY][tempX]?.colorPiece != color
+            board[tempY][tempX] != null &&
+            board[tempY][tempX]?.colorPiece != color
         )
             break;
     }
 }
 
 function checkDiagonalBotLeft(
-    legalMoveArray: any[][],
+    board: any[][],
     kingPosition: { x: number; y: number },
-    stateProps: useStateProps,
+    stateObject: useStateObject,
     color: string
 ) {
     let tempX = kingPosition.x;
@@ -103,29 +114,30 @@ function checkDiagonalBotLeft(
     while (tempX > 0 && tempY < 7) {
         tempX -= 1;
         tempY += 1;
-        if (legalMoveArray[tempY][tempX] != null) {
+        if (board[tempY][tempX] != null) {
             numberSameColor = checkPiece(
-                legalMoveArray[tempY][tempX],
+                board[tempY][tempX],
                 color,
                 numberSameColor,
-                stateProps,
+                stateObject,
                 pinnedPosition,
                 { x: tempX, y: tempY },
-                legalMoveArray
+                kingPosition,
+                board
             );
         }
         if (
-            legalMoveArray[tempY][tempX] != null &&
-            legalMoveArray[tempY][tempX]?.colorPiece != color
+            board[tempY][tempX] != null &&
+            board[tempY][tempX]?.colorPiece != color
         )
             break;
     }
 }
 
 function checkDiagonalBotRight(
-    legalMoveArray: any[][],
+    board: any[][],
     kingPosition: { x: number; y: number },
-    stateProps: useStateProps,
+    stateObject: useStateObject,
     color: string
 ) {
     let tempX = kingPosition.x;
@@ -135,33 +147,34 @@ function checkDiagonalBotRight(
     while (tempX < 7 && tempY < 7) {
         tempX += 1;
         tempY += 1;
-        if (legalMoveArray[tempY][tempX] != null) {
+        if (board[tempY][tempX] != null) {
             numberSameColor = checkPiece(
-                legalMoveArray[tempY][tempX],
+                board[tempY][tempX],
                 color,
                 numberSameColor,
-                stateProps,
+                stateObject,
                 pinnedPosition,
                 { x: tempX, y: tempY },
-                legalMoveArray
+                kingPosition,
+                board
             );
         }
         if (
-            legalMoveArray[tempY][tempX] != null &&
-            legalMoveArray[tempY][tempX]?.colorPiece != color
+            board[tempY][tempX] != null &&
+            board[tempY][tempX]?.colorPiece != color
         )
             break;
     }
 }
 
 export function checkDiagonal(
-    legalMoveArray: any[][],
+    board: any[][],
     kingPosition: { x: number; y: number },
-    stateProps: useStateProps,
+    stateObject: useStateObject,
     color: string
 ) {
-    checkDiagonalTopLeft(legalMoveArray, kingPosition, stateProps, color);
-    checkDiagonalTopRight(legalMoveArray, kingPosition, stateProps, color);
-    checkDiagonalBotLeft(legalMoveArray, kingPosition, stateProps, color);
-    checkDiagonalBotRight(legalMoveArray, kingPosition, stateProps, color);
+    checkDiagonalTopLeft(board, kingPosition, stateObject, color);
+    checkDiagonalTopRight(board, kingPosition, stateObject, color);
+    checkDiagonalBotLeft(board, kingPosition, stateObject, color);
+    checkDiagonalBotRight(board, kingPosition, stateObject, color);
 }

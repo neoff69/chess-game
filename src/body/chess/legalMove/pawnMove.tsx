@@ -1,100 +1,111 @@
-import { dragItem } from "../chessUtils/props";
+import { dragItem } from "../chessUtils/object";
 
 function pieceEatableEnPassant(
-    props: dragItem,
+    objectDragItem: dragItem,
     copyLegalMoveArray: number[][],
     direction: number
 ) {
     if (
-        props.stateProps.board[props.origin.y][props.origin.x + 1]?.enPassant ==
-        true
+        objectDragItem.stateObject.board[objectDragItem.origin.y][
+            objectDragItem.origin.x + 1
+        ]?.enPassant == true
     )
-        copyLegalMoveArray[props.origin.y + direction][props.origin.x + 1] = 1;
+        copyLegalMoveArray[objectDragItem.origin.y + direction][
+            objectDragItem.origin.x + 1
+        ] = 1;
     else if (
-        props.stateProps.board[props.origin.y][props.origin.x - 1]?.enPassant ==
-        true
+        objectDragItem.stateObject.board[objectDragItem.origin.y][
+            objectDragItem.origin.x - 1
+        ]?.enPassant == true
     )
-        copyLegalMoveArray[props.origin.y + direction][props.origin.x - 1] = 1;
+        copyLegalMoveArray[objectDragItem.origin.y + direction][
+            objectDragItem.origin.x - 1
+        ] = 1;
 }
 
 function pieceEatable(
-    props: dragItem,
+    objectDragItem: dragItem,
     direction: number,
     copyLegalMoveArray: number[][]
 ) {
     let colorOpponent = "white";
     if (direction == 1) colorOpponent = "black";
-    if (props.origin.y < 7 && props.origin.y > 0) {
+    if (objectDragItem.origin.y < 7 && objectDragItem.origin.y > 0) {
         if (
-            props.stateProps.board[props.origin.y + 1 * direction][
-                props.origin.x + 1
-            ]?.colorPiece == colorOpponent
+            objectDragItem.stateObject.board[
+                objectDragItem.origin.y + 1 * direction
+            ][objectDragItem.origin.x + 1]?.colorPiece == colorOpponent
         )
-            copyLegalMoveArray[props.origin.y + 1 * direction][
-                props.origin.x + 1
+            copyLegalMoveArray[objectDragItem.origin.y + 1 * direction][
+                objectDragItem.origin.x + 1
             ] = 1;
         else if (
-            props.stateProps.board[props.origin.y + 1 * direction][
-                props.origin.x - 1
-            ]?.colorPiece == colorOpponent
+            objectDragItem.stateObject.board[
+                objectDragItem.origin.y + 1 * direction
+            ][objectDragItem.origin.x - 1]?.colorPiece == colorOpponent
         )
-            copyLegalMoveArray[props.origin.y + 1 * direction][
-                props.origin.x - 1
+            copyLegalMoveArray[objectDragItem.origin.y + 1 * direction][
+                objectDragItem.origin.x - 1
             ] = 1;
     }
-    if (props.origin.y == 4 && direction == 1)
-        pieceEatableEnPassant(props, copyLegalMoveArray, direction);
-    else if (props.origin.y == 3 && direction == -1) {
-        pieceEatableEnPassant(props, copyLegalMoveArray, direction);
+    if (objectDragItem.origin.y == 4 && direction == 1)
+        pieceEatableEnPassant(objectDragItem, copyLegalMoveArray, direction);
+    else if (objectDragItem.origin.y == 3 && direction == -1) {
+        pieceEatableEnPassant(objectDragItem, copyLegalMoveArray, direction);
     }
 }
 
 function firstDeplacement(
-    props: dragItem,
+    objectDragItem: dragItem,
     direction: number,
     copyLegalMoveArray: number[][]
 ) {
     if (
-        props.origin.y < 7 &&
-        props.origin.y > 0 &&
-        props.stateProps.board[props.origin.y + 1 * direction][
-            props.origin.x
-        ] == null
+        objectDragItem.origin.y < 7 &&
+        objectDragItem.origin.y > 0 &&
+        objectDragItem.stateObject.board[
+            objectDragItem.origin.y + 1 * direction
+        ][objectDragItem.origin.x] == null
     )
-        copyLegalMoveArray[props.origin.y + 1 * direction][props.origin.x] = 1;
+        copyLegalMoveArray[objectDragItem.origin.y + 1 * direction][
+            objectDragItem.origin.x
+        ] = 1;
 }
 
 function secondDeplacement(
-    props: dragItem,
+    objectDragItem: dragItem,
     direction: number,
     copyLegalMoveArray: number[][]
 ) {
     if (
-        ((props.origin.y == 1 && direction == 1) ||
-            (props.origin.y == 6 && direction == -1)) &&
-        props.stateProps.board[props.origin.y + 1 * direction][
-            props.origin.x
-        ] == null &&
-        props.stateProps.board[props.origin.y + 2 * direction][
-            props.origin.x
-        ] == null
+        ((objectDragItem.origin.y == 1 && direction == 1) ||
+            (objectDragItem.origin.y == 6 && direction == -1)) &&
+        objectDragItem.stateObject.board[
+            objectDragItem.origin.y + 1 * direction
+        ][objectDragItem.origin.x] == null &&
+        objectDragItem.stateObject.board[
+            objectDragItem.origin.y + 2 * direction
+        ][objectDragItem.origin.x] == null
     ) {
-        copyLegalMoveArray[props.origin.y + 2 * direction][props.origin.x] = 1;
+        copyLegalMoveArray[objectDragItem.origin.y + 2 * direction][
+            objectDragItem.origin.x
+        ] = 1;
     }
 }
 
-function checkPawnMove(props: dragItem, direction: number) {
-    props.stateProps.setLegalMoveArray((prevBoard: number[][]) => {
+function checkPawnMove(objectDragItem: dragItem, direction: number) {
+    objectDragItem.stateObject.setLegalMoveArray((prevBoard: number[][]) => {
         let copyLegalMoveArray = prevBoard.map((row: any) => [...row]);
-        firstDeplacement(props, direction, copyLegalMoveArray);
-        secondDeplacement(props, direction, copyLegalMoveArray);
-        pieceEatable(props, direction, copyLegalMoveArray);
+        firstDeplacement(objectDragItem, direction, copyLegalMoveArray);
+        secondDeplacement(objectDragItem, direction, copyLegalMoveArray);
+        pieceEatable(objectDragItem, direction, copyLegalMoveArray);
         return copyLegalMoveArray;
     });
 }
 
-export function pawnMove(props: dragItem): void {
-    if (props.pieceProps == null) return;
-    if (props.pieceProps.colorPiece == "white") checkPawnMove(props, 1);
-    else checkPawnMove(props, -1);
+export function pawnMove(objectDragItem: dragItem): void {
+    if (objectDragItem.pieceObject == null) return;
+    if (objectDragItem.pieceObject.colorPiece == "white")
+        checkPawnMove(objectDragItem, 1);
+    else checkPawnMove(objectDragItem, -1);
 }

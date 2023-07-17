@@ -1,18 +1,18 @@
-import { dragItem } from "../../chessUtils/props";
+import { dragItem } from "../../chessUtils/object";
 import { checkIfEmptyOrEatable } from "./moveUtils";
 
 function xLeftAxisMove(
-    props: dragItem,
+    objectDragItem: dragItem,
     canEat: string,
     copyLegalMoveArray: any[][]
 ) {
-    let copyX = props.origin.x - 1;
+    let copyX = objectDragItem.origin.x - 1;
 
     while (copyX >= 0) {
         if (
-            checkIfEmptyOrEatable(props, canEat, copyLegalMoveArray, {
+            checkIfEmptyOrEatable(objectDragItem, canEat, copyLegalMoveArray, {
                 x: copyX,
-                y: props.origin.y,
+                y: objectDragItem.origin.y,
             }) == false
         )
             break;
@@ -21,17 +21,17 @@ function xLeftAxisMove(
 }
 
 function xRightAxisMove(
-    props: dragItem,
+    objectDragItem: dragItem,
     canEat: string,
     copyLegalMoveArray: any[][]
 ) {
-    let copyX = props.origin.x + 1;
+    let copyX = objectDragItem.origin.x + 1;
 
     while (copyX <= 7) {
         if (
-            checkIfEmptyOrEatable(props, canEat, copyLegalMoveArray, {
+            checkIfEmptyOrEatable(objectDragItem, canEat, copyLegalMoveArray, {
                 x: copyX,
-                y: props.origin.y,
+                y: objectDragItem.origin.y,
             }) == false
         )
             break;
@@ -40,16 +40,16 @@ function xRightAxisMove(
 }
 
 function yBottomAxisMove(
-    props: dragItem,
+    objectDragItem: dragItem,
     canEat: string,
     copyLegalMoveArray: any[][]
 ) {
-    let copyY = props.origin.y - 1;
+    let copyY = objectDragItem.origin.y - 1;
 
     while (copyY >= 0) {
         if (
-            checkIfEmptyOrEatable(props, canEat, copyLegalMoveArray, {
-                x: props.origin.x,
+            checkIfEmptyOrEatable(objectDragItem, canEat, copyLegalMoveArray, {
+                x: objectDragItem.origin.x,
                 y: copyY,
             }) == false
         )
@@ -59,16 +59,16 @@ function yBottomAxisMove(
 }
 
 function yTopAxisMove(
-    props: dragItem,
+    objectDragItem: dragItem,
     canEat: string,
     copyLegalMoveArray: any[][]
 ) {
-    let copyY = props.origin.y + 1;
+    let copyY = objectDragItem.origin.y + 1;
 
     while (copyY <= 7) {
         if (
-            checkIfEmptyOrEatable(props, canEat, copyLegalMoveArray, {
-                x: props.origin.x,
+            checkIfEmptyOrEatable(objectDragItem, canEat, copyLegalMoveArray, {
+                x: objectDragItem.origin.x,
                 y: copyY,
             }) == false
         )
@@ -78,12 +78,12 @@ function yTopAxisMove(
 }
 
 export function lineMove(
-    props: dragItem,
+    objectDragItem: dragItem,
     canEat: string,
     copyLegalMoveArray: any[][]
 ) {
-    xLeftAxisMove(props, canEat, copyLegalMoveArray);
-    xRightAxisMove(props, canEat, copyLegalMoveArray);
-    yBottomAxisMove(props, canEat, copyLegalMoveArray);
-    yTopAxisMove(props, canEat, copyLegalMoveArray);
+    xLeftAxisMove(objectDragItem, canEat, copyLegalMoveArray);
+    xRightAxisMove(objectDragItem, canEat, copyLegalMoveArray);
+    yBottomAxisMove(objectDragItem, canEat, copyLegalMoveArray);
+    yTopAxisMove(objectDragItem, canEat, copyLegalMoveArray);
 }
