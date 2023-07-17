@@ -1,30 +1,30 @@
-import { dragItem } from "../../chessUtils/props";
+import { dragItem } from "../../chessUtils/object";
 import { useDrag } from "react-dnd";
 import { showLegalMove } from "../../legalMove/legalMove";
 import { useEffect } from "react";
-import { setlegalMoveToZero } from "../setUpUseState";
+import { setlegalMoveToZero } from "../../chessUtils/setUpUseState";
 
-function checkIfDraggable(props: dragItem): boolean {
+function checkIfDraggable(objectDragItem: dragItem): boolean {
     let isDraggable: boolean = false;
-    if (props.pieceProps == null) return isDraggable;
+    if (objectDragItem.pieceObject == null) return isDraggable;
     if (
-        (props.stateProps.turn % 2 == 0 &&
-            props.pieceProps.colorPiece == "white") ||
-        (props.stateProps.turn % 2 == 1 &&
-            props.pieceProps.colorPiece == "black")
+        (objectDragItem.stateObject.turn % 2 == 0 &&
+            objectDragItem.pieceObject.colorPiece == "white") ||
+        (objectDragItem.stateObject.turn % 2 == 1 &&
+            objectDragItem.pieceObject.colorPiece == "black")
     ) {
         isDraggable = true;
     }
     return isDraggable;
 }
 
-function displayNoPicture(props: dragItem): JSX.Element {
+function displayNoPicture(objectDragItem: dragItem): JSX.Element {
     return (
         <div
             className={` h-6 w-6 ${
-                props.stateProps.legalMoveArray[props.origin.y][
-                    props.origin.x
-                ] > 0
+                objectDragItem.stateObject.legalMoveArray[
+                    objectDragItem.origin.y
+                ][objectDragItem.origin.x] > 0
                     ? " rounded-full bg-amber-400"
                     : ""
             }`}
@@ -32,54 +32,83 @@ function displayNoPicture(props: dragItem): JSX.Element {
     );
 }
 
-function isBorderNeeded(props: dragItem, isDragging: boolean): boolean {
-    if (props.stateProps.legalMoveArray[props.origin.y][props.origin.x] == 1)
+function isBorderNeeded(
+    objectDragItem: dragItem,
+    isDragging: boolean,
+    origin: { x: number; y: number }
+): boolean {
+    if (
+        objectDragItem.stateObject.legalMoveArray[objectDragItem.origin.y][
+            objectDragItem.origin.x
+        ] === 1
+    )
+        return true;
+    if (
+        origin.x === objectDragItem.origin.x &&
+        origin.y === objectDragItem.origin.y
+    )
         return true;
     return isDragging;
 }
 
+function handleFirstClick(objectDragItem: dragItem, isDraggable: boolean) {
+    if (isDraggable) {
+        showLegalMove(objectDragItem);
+        objectDragItem.stateObject.setOriginClick({
+            x: objectDragItem.origin.x,
+            y: objectDragItem.origin.y,
+        });
+    }
+}
+
 function displayPicture(
-    props: dragItem,
+    objectDragItem: dragItem,
     drag: any,
     isDragging: boolean | any
 ): JSX.Element {
-    let isDraggable: boolean = checkIfDraggable(props);
-    if (props.pieceProps == null) return <></>;
+    let isDraggable: boolean = checkIfDraggable(objectDragItem);
+    if (objectDragItem.pieceObject == null) return <></>;
     return (
         <img
-            //onClick={() => console.log("todo")}
+            onClick={() => handleFirstClick(objectDragItem, isDraggable)}
             ref={isDraggable ? drag : null}
             className={`h-full ${
-                isBorderNeeded(props, isDragging)
+                isBorderNeeded(
+                    objectDragItem,
+                    isDragging,
+                    objectDragItem.stateObject.originClick
+                )
                     ? " border-4 border-amber-400"
                     : ""
             }`}
-            id={props.pieceProps.id}
-            src={`../../../../img/${props.pieceProps.colorPiece}_${props.pieceProps.piece}.svg`}
-            alt={`${props.pieceProps.colorPiece} ${props.pieceProps.piece}`}
+            id={objectDragItem.pieceObject.id}
+            src={`../../../../img/${objectDragItem.pieceObject.colorPiece}_${objectDragItem.pieceObject.piece}.svg`}
+            alt={`${objectDragItem.pieceObject.colorPiece} ${objectDragItem.pieceObject.piece}`}
         />
     );
 }
 
-function setUpDragEvent(props: dragItem) {
+function setUpDragEvent(objectDragItem: dragItem) {
     const [{ isDragging }, drag] = useDrag(() => ({
         type: "image",
-        item: { pieceProps: props, origin: props.origin },
+        item: { pieceObject: objectDragItem, origin: objectDragItem.origin },
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging(),
         }),
     }));
     useEffect(() => {
         if (isDragging) {
-            showLegalMove(props);
-        } else props.stateProps.setLegalMoveArray(setlegalMoveToZero());
+            showLegalMove(objectDragItem);
+        } else
+            objectDragItem.stateObject.setLegalMoveArray(setlegalMoveToZero());
     }, [isDragging]);
     return [isDragging, drag];
 }
 
-export function Picture(props: dragItem): JSX.Element | null {
-    const [isDragging, drag] = setUpDragEvent(props);
+export function Picture(objectDragItem: dragItem): JSX.Element | null {
+    const [isDragging, drag] = setUpDragEvent(objectDragItem);
 
-    if (props.pieceProps == null) return displayNoPicture(props);
-    else return displayPicture(props, drag, isDragging);
+    if (objectDragItem.pieceObject == null)
+        return displayNoPicture(objectDragItem);
+    else return displayPicture(objectDragItem, drag, isDragging);
 }

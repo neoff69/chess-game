@@ -1,75 +1,134 @@
 import { useDrop } from "react-dnd";
-import { useStateProps } from "../../chessUtils/props";
-import { dragItem, pieceProps, boxProps } from "../../chessUtils/props";
+import { useEffect, useState } from "react";
+import { useStateObject } from "../../chessUtils/object";
+import { dragItem, pieceObject, boxObject } from "../../chessUtils/object";
 import { Picture } from "./displayPicture";
-import { enPassantManager } from "./enPassant";
+import { pawnSpecialAction } from "./pawnSpecialAction";
+import { setlegalMoveToZero } from "../../chessUtils/setUpUseState";
+import { checkIfNextMoveCheck } from "../../checkHub/checkIfCheck";
 
-function setUpProps(
-    pieceProps: pieceProps | null,
-    boxProps: boxProps,
+function setUpObject(
+    pieceObject: pieceObject | null,
+    boxObject: boxObject,
     position: { x: number; y: number },
-    stateProps: useStateProps
+    stateObject: useStateObject
 ) {
-    let props: dragItem = {
+    let objectDragItem: dragItem = {
         origin: position,
-        pieceProps: pieceProps,
-        boxProps: boxProps,
-        stateProps: stateProps,
+        pieceObject: pieceObject,
+        boxObject: boxObject,
+        stateObject: stateObject,
     };
-    return props;
+    return objectDragItem;
+}
+
+function setUpKingOrigin(
+    stateObject: useStateObject,
+    ending: { x: number; y: number },
+    row: pieceObject
+) {
+    if (row.piece === "king") {
+        if (row.colorPiece === "white")
+            stateObject.setPositionWhiteKing(ending);
+        else stateObject.setPositionBlackKing(ending);
+    }
 }
 
 function updateBoard(
-    stateProps: useStateProps,
+    stateObject: useStateObject,
     origin: { x: number; y: number },
     ending: { x: number; y: number }
 ) {
-    stateProps.setBoard((prevBoard: (pieceProps | null)[][]) => {
-        let tempBoard = prevBoard.map((row: any) => [...row]);
-        tempBoard[ending.y][ending.x] = {
-            ...tempBoard[origin.y][origin.x],
+    stateObject.setBoard((prevBoard: (pieceObject | null)[][]) => {
+        let copyBoard = prevBoard.map((row: any) => [...row]);
+        copyBoard[ending.y][ending.x] = {
+            ...copyBoard[origin.y][origin.x],
         };
-        enPassantManager(origin, ending, tempBoard, stateProps);
-        tempBoard[origin.y][origin.x] = null;
-        return tempBoard;
+        setUpKingOrigin(stateObject, ending, copyBoard[ending.y][ending.x]);
+        pawnSpecialAction(origin, ending, copyBoard, stateObject);
+        copyBoard[origin.y][origin.x] = null;
+        checkIfNextMoveCheck(copyBoard, stateObject);
+        return copyBoard;
     });
-    stateProps.setTurn((prevTurn: number) => {
+    stateObject.setTurn((prevTurn: number) => {
         let nextTurn = prevTurn + 1;
         return nextTurn;
     });
 }
 
 function setUpDropEvent(
-    stateProps: useStateProps,
+    stateObject: useStateObject,
     origin: { x: number; y: number }
 ) {
     const [, drop] = useDrop(() => ({
         accept: "image",
         drop: (item: dragItem) => {
-            updateBoard(stateProps, item.origin, origin);
+            updateBoard(stateObject, item.origin, origin);
         },
     }));
 
     return [, drop];
 }
 
+function handleSecondClick(
+    stateObject: useStateObject,
+    origin: { x: number; y: number }
+) {
+    if (
+        stateObject.legalMoveArray[origin.y][origin.x] > 0 &&
+        stateObject.originClick.x != -1
+    ) {
+        updateBoard(stateObject, stateObject.originClick, origin);
+        stateObject.setOriginClick({ x: -1, y: -1 });
+        stateObject.setLegalMoveArray(setlegalMoveToZero());
+    }
+}
+
+function getBoxColor(
+    pieceObject: pieceObject | null,
+    stateObject: useStateObject,
+    boxObject: boxObject,
+    setColor: React.Dispatch<React.SetStateAction<string>>
+) {
+    useEffect(() => {
+        if (
+            pieceObject?.piece === "king" &&
+            pieceObject.colorPiece === stateObject.check
+        ) {
+            setColor("bg-red-500");
+            stateObject.setCheck("");
+        } else {
+            setColor(boxObject.colorBox);
+        }
+    }, [stateObject.board]);
+}
+
 export function BoxNoPiece(
-    props: boxProps,
-    pieceProps: pieceProps | null,
+    boxObject: boxObject,
+    pieceObject: pieceObject | null,
     origin: { x: number; y: number },
-    stateProps: useStateProps
+    stateObject: useStateObject
 ): JSX.Element {
-    const [, drop] = setUpDropEvent(stateProps, origin);
+    let dragItemObject: dragItem = setUpObject(
+        pieceObject,
+        boxObject,
+        origin,
+        stateObject
+    );
+    const [, drop] = setUpDropEvent(stateObject, origin);
+    const [color, setColor] = useState(boxObject.colorBox);
+
+    getBoxColor(pieceObject, stateObject, boxObject, setColor);
     return (
         <li
             ref={
-                stateProps.legalMoveArray[origin.y][origin.x] > 0 ? drop : null
+                stateObject.legalMoveArray[origin.y][origin.x] > 0 ? drop : null
             }
+            onClick={() => handleSecondClick(stateObject, origin)}
             id="box"
-            className={`column-2 fixed ${props.colorBox} ${props.bottom} 
-            ${props.left} flex aspect-square w-1/8 items-center justify-center`}
+            className={`column-2 fixed ${color} ${boxObject.bottom} ${boxObject.left} flex aspect-square w-1/8 items-center justify-center`}
         >
-            <Picture {...setUpProps(pieceProps, props, origin, stateProps)} />
+            <Picture {...dragItemObject} />
         </li>
     );
 }

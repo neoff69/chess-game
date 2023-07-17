@@ -2,12 +2,12 @@ import {
     setUpFullPieceLineBlack,
     setUpFullPieceLineWhite,
     setUpEmptyLine,
-} from "../chessUtils/setUpLine";
-import { enPassant, pieceProps, useStateProps } from "../chessUtils/props";
+} from "./setUpLine";
+import { enPassant, pieceObject, useStateObject } from "./Object";
 import { useState } from "react";
 
-function setArrayElement(): (pieceProps | null)[][] {
-    let arrayElement: (pieceProps | null)[][] = [];
+function setArrayElement(): (pieceObject | null)[][] {
+    let arrayElement: (pieceObject | null)[][] = [];
 
     arrayElement = arrayElement.concat(
         setUpFullPieceLineWhite(),
@@ -38,8 +38,8 @@ function setUpEnPassant(): enPassant {
     return enPassant;
 }
 
-export function setUpState(): useStateProps {
-    const [board, setBoard] = useState<(pieceProps | null)[][]>(
+export function setUpState(): useStateObject {
+    const [board, setBoard] = useState<(pieceObject | null)[][]>(
         setArrayElement()
     );
     const [legalMoveArray, setlegalMoveArray] = useState<number[][]>(
@@ -47,7 +47,11 @@ export function setUpState(): useStateProps {
     );
     const [turn, setTurn] = useState<number>(0);
     const [enPassant, setEnPassant] = useState<enPassant>(setUpEnPassant());
-    let stateProps: useStateProps = {
+    const [originClick, setOriginClick] = useState({ x: -1, y: -1 });
+    const [PositionWhiteKing, setPositionWhiteKing] = useState({ x: 4, y: 0 });
+    const [PositionBlackKing, setPositionBlackKing] = useState({ x: 4, y: 7 });
+    const [check, setCheck] = useState("");
+    let stateObject: useStateObject = {
         board: board,
         setBoard: setBoard,
         legalMoveArray: legalMoveArray,
@@ -56,6 +60,14 @@ export function setUpState(): useStateProps {
         setTurn: setTurn,
         enPassant: enPassant,
         setEnPassant: setEnPassant,
+        originClick,
+        setOriginClick,
+        PositionWhiteKing,
+        setPositionWhiteKing,
+        PositionBlackKing,
+        setPositionBlackKing,
+        check,
+        setCheck,
     };
-    return stateProps;
+    return stateObject;
 }
